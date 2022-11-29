@@ -30,6 +30,11 @@ public class IvalidController {
     @Autowired private BrasilApiService brasilApiService;
     @Autowired private ViaCepApiService viaCepApiService;
 
+    @GetMapping("/hello")
+    public ResponseEntity<String> hello() {
+        return ResponseEntity.status(200).body("Hello!");
+    }
+    
     @GetMapping("/validate")
     public ResponseEntity<String> validate(@RequestParam String type, @RequestParam String num, @RequestParam(required = false) String uf) throws Exception {
 
