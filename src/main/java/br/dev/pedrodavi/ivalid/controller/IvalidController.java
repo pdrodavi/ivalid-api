@@ -32,7 +32,7 @@ public class IvalidController {
 
     @GetMapping("/hello")
     public ResponseEntity<String> hello() {
-        return ResponseEntity.status(200).body("Deploy Pipe!");
+        return ResponseEntity.status(200).body("Hello :)");
     }
     
     @GetMapping("/validate")
