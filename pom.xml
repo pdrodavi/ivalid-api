@@ -65,6 +65,14 @@
         </dependencies>
     </dependencyManagement>
 
+    <distributionManagement>
+      <snapshotRepository>
+          <id>snapshots</id>
+          <name>Srvex-snapshots</name>
+          <url>https://srvextechnology.jfrog.io/artifactory/registry-libs-snapshot</url>
+      </snapshotRepository>
+    </distributionManagement>
+         
     <build>
         <plugins>
             <plugin>
