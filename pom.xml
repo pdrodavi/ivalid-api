@@ -94,7 +94,7 @@
 				</executions>
 				<configuration>
 					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-					<repository>pdrodavi/ivalid-1.0.0</repository>
+					<repository>pdrodavi/ivalid</repository>
 					<tag>${project.version}</tag>
 					<buildArgs>
 					  <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
