@@ -14,4 +14,7 @@ pipeline {
     }
 
   }
+  environment {
+    maven = 'M3'
+  }
 }
