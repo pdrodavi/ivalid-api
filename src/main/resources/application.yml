@@ -1,6 +1,6 @@
 spring:
   application:
-    name: ivalid
+    name: ${APP_NAME:ivalid}
 
 management:
   endpoints:
@@ -10,11 +10,11 @@ management:
         include: [ "health","prometheus", "metrics" ]
   endpoint:
     health:
-      show-details: always
+      show-details: ${SHOW_DETAILS:always}
     metrics:
-      enabled: true
+      enabled: ${METRICS:true}
     prometheus:
-      enabled: true
+      enabled: ${PROMETHEUS:true}
 
 server:
-  port: 7000
+  port: ${PORT:7000}
