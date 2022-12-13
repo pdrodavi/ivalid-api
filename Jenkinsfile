@@ -3,12 +3,13 @@ pipeline {
   stages {
     stage('Input') {
       steps {
-        input(message: 'Input Test', id: 'test')
+        git 'https://github.com/pdrodavi/ivalid-api.git'
       }
     }
 
   }
   environment {
     maven = 'M3'
+    dockerTool = 'Docker'
   }
 }
