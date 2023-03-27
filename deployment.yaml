@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ivalid-api
+  namespace: dev-back-java
+  labels:
+    k8s-app: ivalid-api
+  annotations:
+    deployment.kubernetes.io/revision: '1'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: ivalid-api
+  template:
+    metadata:
+      name: ivalid-api
+      labels:
+        k8s-app: ivalid-api
+    spec:
+      containers:
+        - name: ivalid-api
+          image: ivalid-api:latest
+          imagePullPolicy: Always
+          securityContext:
+            privileged: 'false'
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
