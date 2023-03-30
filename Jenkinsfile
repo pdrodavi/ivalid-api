@@ -41,7 +41,7 @@ pipeline {
                 executeStage = true
             }
 
-            conditionalStage("Analysis SonarQube", executeStage) {
+            conditionalStage("Analysis", executeStage) {
 
                 if ("${inputAnalysis}" == 'Yes') {
                     withSonarQubeEnv('sonarqube') {
@@ -66,7 +66,7 @@ pipeline {
             println("Realizando construção do artefato")
             println("Artifact: " + readMavenPom().getArtifactId())
             println("Version: " + readMavenPom().getVersion())
-            sh "mvn -Dmaven.test.skip=true -Dmaven.test.failure.ignore package"
+            sh "mvn -Dmaven.test.skip=true -Dmaven.test.failure.ignore clean package"
           }
       }
     }
@@ -96,7 +96,7 @@ pipeline {
                 executeStage = true
             }
 
-            conditionalStage("Publish to Registry", executeStage) {
+            conditionalStage("Publish Image", executeStage) {
                 withDockerRegistry(credentialsId: Constants.JENKINS_JFROG_CREDENTIALS_ID, url: Constants.JENKINS_JFROG_URL_REGISTRY) {
                     sh "docker push pdrodavi/${readMavenPom().getArtifactId()}:latest"
                 }
