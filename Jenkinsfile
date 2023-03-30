@@ -75,9 +75,35 @@ pipeline {
       steps {
         container('docker') {
           println("Criando a imagem Docker")
-          sh "docker build -t ${readMavenPom().getArtifactId()}:${readMavenPom().getVersion()} ."
+          sh "docker build -t pdrodavi/${readMavenPom().getArtifactId()}:latest ."
         }
       }
     }
+    
+    stage('Publish Image') {
+      steps {
+          script {
+            inputPublish = input([
+                    message: 'Publish to Registry?',
+                    parameters: [
+                            choice(name: 'Publish', choices: ['Yes', 'No'], description: 'Publish image to artifactory')
+                    ]
+            ])
+
+            Boolean executeStage = false
+
+            if ("${inputPublish}" == 'Yes') {
+                executeStage = true
+            }
+
+            conditionalStage("Publish to Registry", executeStage) {
+                withDockerRegistry(credentialsId: Constants.JENKINS_JFROG_CREDENTIALS_ID, url: Constants.JENKINS_JFROG_URL_REGISTRY) {
+                    sh "docker push pdrodavi/${readMavenPom().getArtifactId()}:latest"
+                }
+            }
+          }
+      }
+    }
+    
   }
 }
