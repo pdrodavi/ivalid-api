@@ -1,3 +1,8 @@
+library identifier: 'jenkins-shared-library-core@main', retriever: modernSCM(
+  [$class: 'GitSCMSource',
+    remote: 'https://github.com/pdrodavi/jenkins-shared-library-core.git'
+  ])
+
 pipeline {
     
   agent {
@@ -8,7 +13,7 @@ pipeline {
   
   tools {
     maven "M3"
-  }
+  }  
   
   stages {
 
@@ -17,6 +22,41 @@ pipeline {
         container('maven') {
           git branch: 'release/1.0.0', changelog: false, poll: false, url: 'https://github.com/pdrodavi/ivalid-api.git'
         }
+      }
+    }
+      
+    stage('Analysis') {
+      steps {
+          script {
+            inputAnalysis = input([
+                    message: 'Analysis SonarQube?',
+                    parameters: [
+                            choice(name: 'Analysis', choices: ['Yes', 'No'], description: 'Run on specific analysis')
+                    ]
+            ])
+
+            Boolean executeStage = false
+
+            if ("${inputAnalysis}" == 'Yes') {
+                executeStage = true
+            }
+
+            conditionalStage("Analysis SonarQube", executeStage) {
+
+                if ("${inputAnalysis}" == 'Yes') {
+                    withSonarQubeEnv('sonarqube') {
+                        sh "mvn -B clean verify sonar:sonar"
+                    }
+                    def qualitygate = waitForQualityGate()
+                    if (qualitygate.status != "OK") {
+                        cleanWs()
+                        error "Pipeline aborted due to quality gate failure: ${qualitygate.status}"
+                    }
+                } else {
+                    println("Step Skipped")
+                }
+            }
+          }
       }
     }  
 
