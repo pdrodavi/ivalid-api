@@ -42,11 +42,8 @@ pipeline {
                 deleteDir()
                 println("Branch selecionada: ${inputBranch}")
                 git branch: "${inputBranch}", changelog: false, poll: false, url: 'https://pdrodavi:' + "${GITHUBRESTJWT}" + '@github.com/pdrodavi/ivalid-api.git'
-                //sh 'git clone -b ' + "${inputBranch}" + ' https://pdrodavi:' + "${GITHUBRESTJWT}" + '@github.com/pdrodavi/ivalid-api.git'
-
             }
           }
-          //git branch: 'release/1.0.0', changelog: false, poll: false, url: 'https://github.com/pdrodavi/ivalid-api.git'
         }
       }
     }
