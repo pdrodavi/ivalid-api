@@ -64,9 +64,7 @@ pipeline {
                 executeStage = true
             }
 
-            conditionalStage("Analysis", executeStage) {
-
-                if ("${inputAnalysis}" == 'Yes') {
+            if ("${inputAnalysis}" == 'Yes') {
                     withSonarQubeEnv('sonarqube') {
                         sh "mvn -B clean verify sonar:sonar"
                     }
@@ -77,8 +75,8 @@ pipeline {
                     }
                 } else {
                     println("Step Skipped")
-                }
             }
+            
           }
       }
     }  
