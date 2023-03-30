@@ -20,31 +20,31 @@ pipeline {
     stage('Checkout') {
       steps {
         container('maven') {
-          
-          def lst = [];
+          script {
+            def lst = [];
 
-          withCredentials([string(name: 'CREDGH', credentialsId: 'github-rest-token', variable: 'GITHUBRESTJWT')]) {
+            withCredentials([string(name: 'CREDGH', credentialsId: 'github-rest-token', variable: 'GITHUBRESTJWT')]) {
 
-              httpRequest consoleLogResponseBody: true, customHeaders: [[maskValue: false, name: 'Accept', value: 'application/vnd.github+json'], [maskValue: false, name: 'Authorization', value: "Bearer ${GITHUBRESTJWT}"], [maskValue: false, name: 'X-GitHub-Api-Version', value: '2022-11-28']], outputFile: 'branches.json', url: "https://api.github.com/repos/pdrodavi/ivalid-api/branches", wrapAsMultipart: false
+                httpRequest consoleLogResponseBody: true, customHeaders: [[maskValue: false, name: 'Accept', value: 'application/vnd.github+json'], [maskValue: false, name: 'Authorization', value: "Bearer ${GITHUBRESTJWT}"], [maskValue: false, name: 'X-GitHub-Api-Version', value: '2022-11-28']], outputFile: 'branches.json', url: "https://api.github.com/repos/pdrodavi/ivalid-api/branches", wrapAsMultipart: false
 
-              def props = readJSON file: "${env.WORKSPACE}/branches.json", returnPojo: true
-              props.each { key, value ->
-                  lst.add("$key.name")
-              }
+                def props = readJSON file: "${env.WORKSPACE}/branches.json", returnPojo: true
+                props.each { key, value ->
+                    lst.add("$key.name")
+                }
 
-              inputBranch = input([
-                      message: 'Choose Branch',
-                      parameters: [
-                              choice(name: 'Branches', choices: lst, description: 'Select branch for pipeline')
-                      ]
-              ])
+                inputBranch = input([
+                        message: 'Choose Branch',
+                        parameters: [
+                                choice(name: 'Branches', choices: lst, description: 'Select branch for pipeline')
+                        ]
+                ])
 
-              deleteDir()
-              println("Branch selecionada: ${inputBranch}")
-              sh 'git clone -b ' + "${inputBranch}" + ' https://pdrodavi:' + "${GITHUBRESTJWT}" + '@github.com/pdrodavi/ivalid-api.git'
+                deleteDir()
+                println("Branch selecionada: ${inputBranch}")
+                sh 'git clone -b ' + "${inputBranch}" + ' https://pdrodavi:' + "${GITHUBRESTJWT}" + '@github.com/pdrodavi/ivalid-api.git'
 
+            }
           }
-          
           //git branch: 'release/1.0.0', changelog: false, poll: false, url: 'https://github.com/pdrodavi/ivalid-api.git'
         }
       }
