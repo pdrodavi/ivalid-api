@@ -17,4 +17,4 @@ management:
       enabled: ${PROMETHEUS:true}
 
 server:
-  port: ${PORT:7000}
+  port: ${PORT:8080}
